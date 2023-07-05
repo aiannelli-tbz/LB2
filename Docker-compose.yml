@@ -1,8 +1,15 @@
 version: '1-0'
 services:
-  web:
+  web_dev:
     ports:
       - "80:80"
     volumes:
-      - /mnt/apache:/var/www/
-    build: ./
+      - /mnt/apache/dev/:/usr/local/apache2/htdocs/
+    build: ./dev/
+  
+  web_prod:
+    ports:
+      - "8081:80"
+    volumes:
+      - /mnt/apache/prod/:/usr/local/apache2/htdocs/
+    build: ./prod/

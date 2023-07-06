@@ -1,6 +1,8 @@
 version: '1-0'
 services:
   web_dev:
+    container_name: web_dev
+    mem_limit: 1g
     ports:
       - "80:80"
     volumes:
@@ -8,6 +10,8 @@ services:
     build: ./dev/
   
   web_prod:
+    container_name: web_prod
+    mem_limit: 1g
     ports:
       - "8081:80"
     volumes:

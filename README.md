@@ -15,6 +15,6 @@ Vom Github repository [aiannelli/LB2](https://github.com/aiannelli-tbz/LB2) kön
 
 # 3. Beschreibung der Umgebung
 Die Umgebung besteht aus 3 Docker Containern. 2 Webservern und einem LoadBalancer. Die Webserver sind mit Apache2 auf port 80 mit dem inetrenen Docker-Netzwerk verbunden. Der LoadBalancer ist mit Nginx aufgesetzt. Die Webserver sind nicht direkt erreichbar, sondern nur über den LoadBalancer. Der LoadBalancer ist vom Host aus über den Port 8080 erreichbar.
-![Netzplan der Umgebung](/LB2/images/LB2_M300.PNG)
+![Netzplan der Umgebung](/images/LB2_M300.PNG)
 
 # 4. Vorgehen 

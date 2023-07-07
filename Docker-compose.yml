@@ -6,7 +6,7 @@ services:
     volumes:
       - /mnt/apache/dev/:/usr/local/apache2/htdocs/
     build: ./dev/
-    memlimit: 50M
+    mem_limit: 1g
 
   web_prod:
     ports:
@@ -14,12 +14,12 @@ services:
     volumes:
       - /mnt/apache/prod/:/usr/local/apache2/htdocs/
     build: ./prod/
-    memlimit: 50M
+    mem_limit: 1g
 
   load_balancer:
     build:
       context: ./nginx/
       
-    memlimit: 50M
+    mem_limit: 1g
     ports:
       - "80:80"  

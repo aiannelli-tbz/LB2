@@ -98,6 +98,9 @@ services:
   load_balancer:
     build:
       context: ./nginx/
+    depends_on:
+      - web_dev
+      - web_prod
       
     mem_limit: 1g
     ports:

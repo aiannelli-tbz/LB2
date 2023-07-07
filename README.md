@@ -102,3 +102,5 @@ Für die beiden Webserver werden Ports freigegeben und die HTMl Files werden in 
 
 # 5. Testen
 Um zu sehen ob alles funktioniert, habe ich die Webserver mit ```docker-compose up --build -d``` gestartet. Anschliessend habe ich mit ```docker ps``` überprüft ob alle Container laufen. Nun habe ich den LoadBalancer über [Localhost:8080](localhost:8080) aufgerufen. Es wurde abwechslungsweise die Website der beiden Webserver angezeigt. Somit funktioniert der LoadBalancer.
+
+# 6. Quellenverzeichnis

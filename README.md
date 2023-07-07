@@ -27,7 +27,7 @@ Als Basis dafür wird ein Vagrant File aus einer vorherigen [Aufgabe](https://gi
 Die Umgebung besteht aus 3 Docker Containern. 2 Webservern und einem LoadBalancer. Die Webserver sind mit Apache2 auf port 80 mit dem inetrenen Docker-Netzwerk verbunden. Der LoadBalancer ist mit Nginx aufgesetzt. Die Webserver sind nicht direkt erreichbar, sondern nur über den LoadBalancer. Der LoadBalancer ist vom Host aus über den Port 8080 erreichbar.
 ![Netzplan der Umgebung](images/LB2_M300.PNG)
 
-Im Github Repository ist zudem eine Action konfiguriert, die bei einem Push aus dem readme.md File ein PDF generiert. Diese kann dann heruntergeladen werden.
+Im Github Repository ist zudem eine Action konfiguriert, die bei einem Push aus dem readme.md File ein PDF generiert. Dieses kann dann heruntergeladen werden.
 
 # 4. Vorgehen 
 

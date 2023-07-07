@@ -6,6 +6,7 @@
 - [3. Beschreibung der Umgebung](#3-beschreibung-der-umgebung)
 - [4. Vorgehen](#4-vorgehen)
 - [5. Testen](#5-testen)
+- [6. Quellenverzeichnis](#6-quellenverzeichnis)
 
 # 1. Einleitung
 
@@ -13,7 +14,7 @@ Im Modul 300 wird im Umfang der LB2 ein Projekt mit Docker Umgesetzt. Der Servic
 
 ## 1.1 Verwendung
 
-Nchdem pullen des Repositorys muss im Arbeitsverzeichnis ```vagrant up``` ausgeführt werden, was die VM startet. Nun kann auf die VM verbunden werden, z.B. mit Bitvise oder Vagrant ssh. In der VM selbst muss man ins ```/mnt``` Verzeichnis navigieren mit ```cd /mnt``` und dort dann ```Compose up --build -d``` ausführen. Nun sind die Webserver gestartet und der LoadBalancer ist über [Localhost:8080](localhost:8080) erreichbar.
+Nchdem pullen des Repositorys muss der eigene Public-Key in das ```scripts/add_ssh_pb.sh``` File hinzugefügt werden. Jetzt kann im Arbeitsverzeichnis ```vagrant up``` ausgeführt werden, was die VM startet. Nun kann auf die VM verbunden werden, z.B. mit Bitvise oder Vagrant ssh. In der VM selbst muss man ins ```/mnt``` Verzeichnis navigieren mit ```cd /mnt``` und dort dann ```Compose up --build -d``` ausführen. Nun sind die Webserver gestartet und der LoadBalancer ist über [Localhost:8080](localhost:8080) erreichbar.
 
 # 2. Voraussetzungen
 

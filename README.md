@@ -106,6 +106,6 @@ Um zu sehen ob alles funktioniert, habe ich die Webserver mit ```docker-compose 
 
 # 6. Quellenverzeichnis
 - [Docker Compose](https://docs.docker.com/compose/)
-  [ChatGPT](chat.openai.com)
+- [ChatGPT](chat.openai.com)
 - [Docker](https://www.docker.com/)
 - [Pinboard](https://docs.google.com/document/d/1I3lii57bxGt3mrPt09S1-F_iWeBVa-IDNCXgo1iofzU/edit)

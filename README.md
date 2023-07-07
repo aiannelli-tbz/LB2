@@ -31,12 +31,12 @@ Zuerst musste ich meine Umgebung von Gitlab zu Github migrieren, da die VM die i
 
 Anschliessend, begann ich damit mein Dockerfiile für Apache zu erstellen. 
 ```Dockerfile	
-    FROM httpd:latest
-    EXPOSE 80
+FROM httpd:latest
+EXPOSE 80
 ```
 Dieses Dockerfile ist sehr simpel, es basiert auf dem neusten Apache Image und öffnet den Port 80. Anschliessend habe ich das Dockerfile für den Nginx LoadBalancer erstellt.
 ```Dockerfile
- FROM nginx:latest
+FROM nginx:latest
 
 RUN rm /etc/nginx/conf.d/default.conf
 
@@ -62,6 +62,9 @@ server {
 }
 ```
 Diese Konfiguration leitet alle Anfragen an den LoadBalancer an die beiden Webserver weiter. Die Webserver sind über das interne Docker-Netzwerk erreichbar. Der LoadBalancer ist über den Port 80 erreichbar.
+
+Um all diese Container zu starten, habe ich dann ein Docker Compose File erstellt.
+```docker-compose.yml
 
 # 5. Testen
 Um zu sehen ob alles funktioniert, habe ich die Webserver mit ```docker-compose up --build -d``` gestartet. Anschliessend habe ich mit ```docker ps``` überprüft ob alle Container laufen. Nun habe ich den LoadBalancer über [Localhost:8080](localhost:8080) aufgerufen. Es wurde abwechslungsweise die Website der beiden Webserver angezeigt. Somit funktioniert der LoadBalancer.

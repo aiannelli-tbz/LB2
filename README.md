@@ -6,7 +6,8 @@
 - [3. Beschreibung der Umgebung](#3-beschreibung-der-umgebung)
 - [4. Vorgehen](#4-vorgehen)
 - [5. Testen](#5-testen)
-- [6. Quellenverzeichnis](#6-quellenverzeichnis)
+- [6. Reflexion](#6-reflexion)
+- [7. Quellenverzeichnis](#7-quellenverzeichnis)
 
 # 1. Einleitung
 
@@ -25,6 +26,8 @@ Als Basis dafür wird ein Vagrant File aus einer vorherigen [Aufgabe](https://gi
 
 Die Umgebung besteht aus 3 Docker Containern. 2 Webservern und einem LoadBalancer. Die Webserver sind mit Apache2 auf port 80 mit dem inetrenen Docker-Netzwerk verbunden. Der LoadBalancer ist mit Nginx aufgesetzt. Die Webserver sind nicht direkt erreichbar, sondern nur über den LoadBalancer. Der LoadBalancer ist vom Host aus über den Port 8080 erreichbar.
 ![Netzplan der Umgebung](images/LB2_M300.PNG)
+
+Im Github Repository ist zudem eine Action konfiguriert, die bei einem Push aus dem readme.md File ein PDF generiert. Diese kann dann heruntergeladen werden.
 
 # 4. Vorgehen 
 
@@ -119,8 +122,13 @@ Um zu sehen ob alles funktioniert, habe ich die Webserver mit ```docker-compose 
 
 Somit funktioniert der LoadBalancer.
 
+# 6. Reflexion
 
-# 6. Quellenverzeichnis
+Zu Anfang des Projekts hatte ich einige Probleme mit dem Vagrant File. Ich habe versucht die VM von Gitlab zu Github zu migrieren, was nicht ganz so einfach war. Nachdem ich das .git Verzeichnis gelöscht hatte, konnte ich die VM auf Github pushen. Als ich aber endlich mit der VM arbeiten konnte, hatte ich keine richtige Idee was ich als Service umsetzen sollte. Schlussendlich begann ich damit Webserver aufzusetzen, da ich dies bereits oft gemacht habe. Die Idee einen Loadbalancer davor zu schalten kam mir erst nachdem ich versucht hatte auf einem Server virtuelle Hosts zu Konfigurieren, was ich aber nicht hinkriegte.
+Glücklicherweise brauchte ich nicht sehr lange den Nginx Loadbalancer zu konfigurieren, sodass ich trotzdem rechtzeitig abschliessen konnte. 
+In diesem Modul habe ich neue Technologien und Tools kennengelernt, aber auch bereits vorhandene Kenntnisse erweitert.
+# 7. Quellenverzeichnis
+
 - [Docker Compose](https://docs.docker.com/compose/)
 - [ChatGPT](chat.openai.com)
 - [Docker](https://www.docker.com/)

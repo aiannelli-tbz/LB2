@@ -29,12 +29,12 @@ Die Umgebung besteht aus 3 Docker Containern. 2 Webservern und einem LoadBalance
 
 Zuerst musste ich meine Umgebung von Gitlab zu Github migrieren, da die VM die ich verwendete aus einem Beispiel auf Gitlab stammte. Dafür musste ich das .git Verzeichnis Löschen und dann nach Github pushen.
 
-Anschliessend, begann ich damit mein Dockerfiile für Apache zu erstellen. 
+Anschliessend, begann ich damit mein **Dockerfiile** für Apache zu erstellen. 
 ```Dockerfile	
 FROM httpd:latest
 EXPOSE 80
 ```
-Dieses Dockerfile ist sehr simpel, es basiert auf dem neusten Apache Image und öffnet den Port 80. Anschliessend habe ich das Dockerfile für den Nginx LoadBalancer erstellt.
+Dieses **Dockerfile** ist sehr simpel, es basiert auf dem neusten Apache Image und öffnet den Port 80. Anschliessend habe ich das **Dockerfile** für den Nginx LoadBalancer erstellt.
 ```Dockerfile
 FROM nginx:latest
 
@@ -42,7 +42,7 @@ RUN rm /etc/nginx/conf.d/default.conf
 
 COPY nginx.conf /etc/nginx/conf.d/
 ```
-Dieses Dockerfile basiert auf dem neusten Nginx Image. Es löscht die default.conf und fügt die eigene nginx.conf hinzu. Diese sieht wie folgt aus:
+Dieses **Dockerfile** basiert auf dem neusten Nginx Image. Es löscht die default.conf und fügt die eigene **nginx.conf** hinzu. Diese sieht wie folgt aus:
 ```nginx.conf
 upstream backend {
     server web_dev:80;
@@ -63,8 +63,42 @@ server {
 ```
 Diese Konfiguration leitet alle Anfragen an den LoadBalancer an die beiden Webserver weiter. Die Webserver sind über das interne Docker-Netzwerk erreichbar. Der LoadBalancer ist über den Port 80 erreichbar.
 
-Um all diese Container zu starten, habe ich dann ein Docker Compose File erstellt.
+Um all diese Container zu starten, habe ich dann ein **Docker Compose File** erstellt.
 ```docker-compose.yml
+version: '1-0'
+services:
+  web_dev:
+    ports:
+      - "80" 
+    volumes:
+      - /mnt/apache/dev/:/usr/local/apache2/htdocs/
+    build: ./dev/
+    limit:
+        cpus: 0.1
+        memory: 50M
+
+  web_prod:
+    ports:
+      - "8081"  
+    volumes:
+      - /mnt/apache/prod/:/usr/local/apache2/htdocs/
+    build: ./prod/
+    limit:
+        cpus: 0.1
+        memory: 50M
+
+  load_balancer:
+    build:
+      context: ./nginx/
+      
+      limit:
+        cpus: 0.1
+        memory: 50M
+    ports:
+      - "80:80"  
+```
+In diesem **Docker compose** file werden alle drei Container konfiguriert.
+Für die beiden Webserver werden Ports freigegeben und die HTMl Files werden in die Ordner gemountet. Die einzelnen Dockerfiles werden mit ```build: ``` angegeben. Auch werden Hardware-Limits definiert, welche die Container daran hindern zu viel Ressourcen zu verbrauchen.
 
 # 5. Testen
 Um zu sehen ob alles funktioniert, habe ich die Webserver mit ```docker-compose up --build -d``` gestartet. Anschliessend habe ich mit ```docker ps``` überprüft ob alle Container laufen. Nun habe ich den LoadBalancer über [Localhost:8080](localhost:8080) aufgerufen. Es wurde abwechslungsweise die Website der beiden Webserver angezeigt. Somit funktioniert der LoadBalancer.

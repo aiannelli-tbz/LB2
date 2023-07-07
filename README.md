@@ -14,6 +14,7 @@ Als Basis dafür wird ein Vagrant File aus einer vorherigen [Aufgabe](https://gi
 Vom Github repository [aiannelli/LB2](https://github.com/aiannelli-tbz/LB2) können dan alle Daten bezogen werden.
 
 # 3. Beschreibung der Umgebung
-![Netzplan der Umgebung](/docker-work-m-300/images/LB2_M184.PNG "Netzplan der Umgebung")
+Die Umgebung besteht aus 3 Docker Containern. 2 Webservern und einem LoadBalancer. Die Webserver sind mit Apache2 auf port 80 mit dem inetrenen Docker-Netzwerk verbunden. Der LoadBalancer ist mit Nginx aufgesetzt. Die Webserver sind nicht direkt erreichbar, sondern nur über den LoadBalancer. Der LoadBalancer ist vom Host aus über den Port 8080 erreichbar.
+![Netzplan der Umgebung](/LB2/images/LB2_M300.PNG)
 
 # 4. Vorgehen 

@@ -5,6 +5,7 @@
 - [2. Voraussetzungen](#2-voraussetzungen)
 - [3. Beschreibung der Umgebung](#3-beschreibung-der-umgebung)
 - [4. Vorgehen](#4-vorgehen)
+- [5. Testen](#5-testen)
 
 # 1. Einleitung
 
@@ -62,3 +63,6 @@ server {
 }
 ```
 Diese Konfiguration leitet alle Anfragen an den LoadBalancer an die beiden Webserver weiter. Die Webserver sind über das interne Docker-Netzwerk erreichbar. Der LoadBalancer ist über den Port 80 erreichbar.
+
+# 5. Testen
+Um zu sehen ob alles funktioniert, habe ich die Webserver mit ```docker-compose up --build -d``` gestartet. Anschliessend habe ich mit ```docker ps``` überprüft ob alle Container laufen. Nun habe ich den LoadBalancer über [Localhost:8080](localhost:8080) aufgerufen. Es wurde abwechslungsweise die Website der beiden Webserver angezeigt. Somit funktioniert der LoadBalancer.

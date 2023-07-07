@@ -10,11 +10,11 @@
 
 # 1. Einleitung
 
-Im Modul 300 wird im Umfang der LB2 ein Projekt mit Docker Umgesetzt. Der Service besteht aus 2 Webservern, welche eine Unterschiedliche Website anzeigen. Davor wird ein Nginx LoadBalancer geschaltet, der Anfragen vom Host auf [Localhost:8080](localhost:8080) beantwortet. Die einzelnen Webserver sind nicht mehr direkt erreichbar. Die Webserver werden mit Docker ```Compose up --build -d``` gestartet.
+Im Modul 300 wird im Umfang der LB2 ein Projekt mit Docker Umgesetzt. Der Service besteht aus 2 Webservern, welche eine Unterschiedliche Website anzeigen. Davor wird ein Nginx LoadBalancer geschaltet, der Anfragen vom Host auf [Localhost:8080](http://localhost:8080/) beantwortet. Die einzelnen Webserver sind nicht mehr direkt erreichbar. Die Webserver werden mit Docker ```Compose up --build -d``` gestartet.
 
 ## 1.1 Verwendung
 
-Nchdem pullen des Repositorys muss der eigene Public-Key in das ```scripts/add_ssh_pb.sh``` File hinzugefügt werden. Jetzt kann im Arbeitsverzeichnis ```vagrant up``` ausgeführt werden, was die VM startet. Nun kann auf die VM verbunden werden, z.B. mit Bitvise oder Vagrant ssh. In der VM selbst muss man ins ```/mnt``` Verzeichnis navigieren mit ```cd /mnt``` und dort dann ```Compose up --build -d``` ausführen. Nun sind die Webserver gestartet und der LoadBalancer ist über [Localhost:8080](localhost:8080) erreichbar.
+Nchdem pullen des Repositorys muss der eigene Public-Key in das ```scripts/add_ssh_pb.sh``` File hinzugefügt werden. Jetzt kann im Arbeitsverzeichnis ```vagrant up``` ausgeführt werden, was die VM startet. Nun kann auf die VM verbunden werden, z.B. mit Bitvise oder Vagrant ssh. In der VM selbst muss man ins ```/mnt``` Verzeichnis navigieren mit ```cd /mnt``` und dort dann ```Compose up --build -d``` ausführen. Nun sind die Webserver gestartet und der LoadBalancer ist über [Localhost:8080](http://localhost:8080) erreichbar.
 
 # 2. Voraussetzungen
 
@@ -29,6 +29,17 @@ Die Umgebung besteht aus 3 Docker Containern. 2 Webservern und einem LoadBalance
 # 4. Vorgehen 
 
 Zuerst musste ich meine Umgebung von Gitlab zu Github migrieren, da die VM die ich verwendete aus einem Beispiel auf Gitlab stammte. Dafür musste ich das .git Verzeichnis Löschen und dann nach Github pushen.
+
+Die VM-konfiguration habe ich wie bereits erwähnt übernommen. Die **Netzwerkkonfiguration** sieht wie folgt aus:
+```Vagrantfile
+config.vm.network "forwarded_port", guest:80, host:8080, auto_correct: true
+config.vm.network "forwarded_port", guest:8081, host:8081, auto_correct: true
+config.vm.network "forwarded_port", guest:8082, host:8082, auto_correct: true
+config.vm.network "forwarded_port", guest:8083, host:8083, auto_correct: true
+config.vm.network "forwarded_port", guest:3306, host:3306, auto_correct: true  
+```
+Interessant ist hierbei der Port 80 der auf 8080 weitergeleitet wird, da dieser für den LoadBalancer benötigt wird. 
+Anschliessend habe ich die VM gestartet und mich mit ihr verbunden. Nun habe ich den Ordner ```/mnt``` erstellt und in diesen die Ordner ```/mnt/apache/dev``` und ```/mnt/apache/prod``` erstellt. In diese Ordner habe ich dann die HTML Files kopiert.
 
 Anschliessend, begann ich damit mein **Dockerfiile** für Apache zu erstellen. 
 ```Dockerfile	
@@ -74,9 +85,7 @@ services:
     volumes:
       - /mnt/apache/dev/:/usr/local/apache2/htdocs/
     build: ./dev/
-    limit:
-        cpus: 0.1
-        memory: 50M
+    mem_limit: 1g
 
   web_prod:
     ports:
@@ -84,28 +93,34 @@ services:
     volumes:
       - /mnt/apache/prod/:/usr/local/apache2/htdocs/
     build: ./prod/
-    limit:
-        cpus: 0.1
-        memory: 50M
+    mem_limit: 1g
 
   load_balancer:
     build:
       context: ./nginx/
       
-      limit:
-        cpus: 0.1
-        memory: 50M
+    mem_limit: 1g
     ports:
       - "80:80"  
+ 
 ```
 In diesem **Docker compose** file werden alle drei Container konfiguriert.
-Für die beiden Webserver werden Ports freigegeben und die HTMl Files werden in die Ordner gemountet. Die einzelnen Dockerfiles werden mit ```build: ``` angegeben. Auch werden Hardware-Limits definiert, welche die Container daran hindern zu viel Ressourcen zu verbrauchen.
+Für die beiden Webserver werden Ports freigegeben und die HTMl Files werden in die Ordner gemountet. Die einzelnen **Dockerfiles** werden mit ```build: ``` angegeben. Auch werden Hardware-Limits definiert, welche die Container daran hindern zu viel Ressourcen zu verbrauchen.
 
 # 5. Testen
-Um zu sehen ob alles funktioniert, habe ich die Webserver mit ```docker-compose up --build -d``` gestartet. Anschliessend habe ich mit ```docker ps``` überprüft ob alle Container laufen. Nun habe ich den LoadBalancer über [Localhost:8080](localhost:8080) aufgerufen. Es wurde abwechslungsweise die Website der beiden Webserver angezeigt. Somit funktioniert der LoadBalancer.
+Um zu sehen ob alles funktioniert, habe ich die Webserver mit ```docker-compose up --build -d``` gestartet. Anschliessend habe ich mit ```docker ps``` überprüft ob alle Container laufen. Nun habe ich den LoadBalancer über [Localhost:8080](http://localhost:8080) aufgerufen. Es wurde abwechslungsweise die Website der beiden Webserver angezeigt.
+
+![Prod website via LoadBalancer](images/Prod.PNG)
+
+![Dev website via LoadBalancer](images/Dev.PNG)
+
+Somit funktioniert der LoadBalancer.
+
 
 # 6. Quellenverzeichnis
 - [Docker Compose](https://docs.docker.com/compose/)
 - [ChatGPT](chat.openai.com)
 - [Docker](https://www.docker.com/)
 - [Pinboard](https://docs.google.com/document/d/1I3lii57bxGt3mrPt09S1-F_iWeBVa-IDNCXgo1iofzU/edit)
+- [Dockerfile](https://docs.docker.com/engine/reference/builder/)
+- [Vagrant VM](https://gitlab.com/mbe99/docker-work)
